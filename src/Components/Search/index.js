@@ -1,17 +1,29 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import "./style.css";
-const Search = () => {
+const Search = (props) => {
   const [inputText, setInputText] = useState("");
   const [searchedResult, setSearchedResult] = useState("");
 
-  useEffect(() => {
-    fetch("http://hn.algolia.com/api/v1/search?query=test")
-      .then((res) => res.json())
-      .then((data) => setSearchedResult(data));
+  const handleChange = (e) => {
+    e.preventDefault();
+    setInputText(e.target.value);
+  };
+
+  const authors = props.news.hits.map((e) => e.author);
+  const tags = props.news.hits.reduce((acc, cv) => {
+    acc = acc.concat(cv._tags);
+    return acc;
   }, []);
-  console.log(inputText);
-  console.log(searchedResult);
+  const allTags = tags.concat(authors);
+  const uniqueTags = [...new Set(allTags)];
+
+  console.log(uniqueTags);
+
+  const handleSearchResult = () => {
+    setInputText("");
+  };
+
   return (
     <div>
       <div className="searchbar">
@@ -39,7 +51,7 @@ const Search = () => {
               title="Search"
               role="combobox"
               placeholder="Search News"
-              onChange={(event) => setInputText(event.target.value)}
+              onChange={(e) => handleChange(e)}
               value={inputText}
             />
           </div>
@@ -67,6 +79,23 @@ const Search = () => {
             </svg>
           </div>
         </div>
+      </div>
+      <button onClick={handleSearchResult}>Search News</button>
+      <div className="result">
+        <ul>
+          <li>
+            {uniqueTags.includes(inputText) ? (
+              <div className="news-result">
+                <h2>This is title of the news</h2>
+                <hr />
+                <h3>This id description paragraph for 2</h3>
+                <a href="#"> url for the site</a>
+              </div>
+            ) : (
+              "News doesnt found"
+            )}
+          </li>
+        </ul>
       </div>
     </div>
   );

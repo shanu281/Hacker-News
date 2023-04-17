@@ -1,18 +1,22 @@
-import logo from "./logo.svg";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./Components/Header";
 import Search from "./Components/Search";
-import Card from "./Components/Card";
-import Footer from "./Components/Footer"
+import Footer from "./Components/Footer";
+
 function App() {
+  const [news, setNews] = useState("");
+  useEffect(() => {
+    fetch("http://hn.algolia.com/api/v1/search?query=test")
+      .then((res) => res.json())
+      .then((data) => setNews(data));
+  }, []);
+
   return (
     <div className="App">
       <Header />
-      <Search />
-      <div className="hero-sec">
-      <Card />
-<Footer />
-      </div>
+      <Search news={news} />
+      <Footer />
     </div>
   );
 }

@@ -110,3 +110,15 @@
   padding: 0 8px;
   width: 2.8em;
 }
+li{
+  color: white;
+  list-style-type: none;
+}
+a{
+  color: white;
+}
+hr{
+  height: 4rem;
+  width: 80vw;
+  margin: auto;
+}
